@@ -11,15 +11,17 @@ id int not null  IDENTITY,
 密码 varchar not null,
 联系方式 varchar(11) not null,
 primary key (id),
-
 );
-create UNIQUE INDEX INDEX_SId ON 管理员 (id ASC) ;
+create UNIQUE INDEX 管理员ID ON 管理员 (id ASC);
+
 
 create table 书籍类型(
 种类 varchar(20) not null default '其他',
 ISBN varchar(13) not null,
 primary key (种类),
 )
+create UNIQUE INDEX 类型 ON 书籍类型 (种类 ASC);
+
 
 create table 出版社(
 名称 varchar(40) not null,
@@ -27,6 +29,8 @@ create table 出版社(
 进货周期 int not null default '0',
 primary key(名称),
 )
+create UNIQUE INDEX 出版社总览 ON 出版社 (名称 ASC);
+
 
 create table 书籍(
 ISBN varchar(13) not null,
@@ -41,6 +45,8 @@ primary key (ISBN),
 foreign key (书籍种类) references 书籍类型(种类) on update cascade  on delete cascade ,
 foreign key (出版社) references 出版社(名称) on update cascade  on delete cascade,
 );
+create UNIQUE INDEX 书籍总览 ON 书籍 (书名 ASC);
+
 
 
 create table VIP(
@@ -49,6 +55,8 @@ create table VIP(
 有效期限 date not null ,
 primary key(卡号),
 )
+create UNIQUE INDEX VIP名单 ON VIP (卡号 ASC);
+
 
 create table 顾客(
 姓名 varchar(10) not null,
@@ -59,6 +67,8 @@ VIP varchar(12) default null ,
 primary key(账号),
 foreign key (VIP)  references VIP(卡号) on update cascade on delete cascade,
 )
+create UNIQUE INDEX 顾客名单 ON 顾客 (姓名 ASC);
+
 
 create table 记录(
 日期 date not null,
@@ -72,6 +82,8 @@ primary key(账号),
 foreign key (ISBN) references 书籍(ISBN) on update cascade  on delete cascade,
 foreign key (账号) references 顾客(账号) on update cascade  on delete cascade,
 )
+create UNIQUE INDEX 交易记录 ON 记录 (日期 ASC);
+
 
 create table 进货表(
 时间 datetime not null,
@@ -80,4 +92,4 @@ primary key(ISBN),
 ISBN varchar(13)not null,
 foreign key (ISBN)  references 书籍(ISBN)on update cascade  on delete cascade,
 )
-
+create UNIQUE INDEX 进货记录 ON 进货表 (时间 ASC);
