@@ -1,0 +1,81 @@
+create database bookstore
+use bookstore
+
+
+create table 管理员(
+id int not null  IDENTITY,
+姓名 varchar not null ,
+用户名 varchar not null unique default '管理员',
+密码 varchar not null,
+联系方式 varchar(11) not null,
+primary key (id),
+
+);
+create UNIQUE INDEX INDEX_SId ON 管理员 (id ASC) ;
+
+create table 书籍类型(
+种类 varchar(20) not null default '其他',
+ISBN varchar(13) not null,
+primary key (种类),
+)
+
+create table 出版社(
+名称 varchar(40) not null,
+地址 varchar(100) not null,
+进货周期 int not null default '0',
+primary key(名称),
+)
+
+create table 书籍(
+ISBN varchar(13) not null,
+书名 varchar(40) not null,
+出版社 varchar(40) not null,
+作者 varchar(20) not null,
+售价 numeric(7,2) not null default '0' check(售价>0),
+简介 text default '一片空白',
+库存 int not null default '0' check(库存>=0),
+书籍种类 varchar(20) not null,
+primary key (ISBN),
+foreign key (书籍种类) references 书籍类型(种类) on update cascade  on delete cascade ,
+foreign key (出版社) references 出版社(名称) on update cascade  on delete cascade,
+);
+
+
+create table VIP(
+卡号 varchar(12) not null ,
+折扣 numeric(3,2) default '1' check(折扣<=1 and 折扣>0) ,
+有效期限 date not null ,
+primary key(卡号),
+)
+
+create table 顾客(
+姓名 varchar(10) not null,
+性别 varchar(1) not null check(性别='男' or 性别='女'),
+账号 varchar(11) not null ,
+VIP varchar(12) default null ,
+单位 varchar(40) default null,
+primary key(账号),
+foreign key (VIP)  references VIP(卡号) on update cascade on delete cascade,
+)
+
+create table 记录(
+日期 date not null,
+姓名 varchar(10) not null,
+经手人 varchar(10) not null,
+ISBN varchar(13) not null,
+金额 numeric(7,2) not null check(金额>0),
+折扣 numeric(3,2) default '1'check(折扣<=1 and 折扣>0),
+账号 varchar(11) not null ,
+primary key(账号),
+foreign key (ISBN) references 书籍(ISBN) on update cascade  on delete cascade,
+foreign key (账号) references 顾客(账号) on update cascade  on delete cascade,
+)
+
+create table 进货表(
+时间 datetime not null,
+数量 int not null default '0',
+primary key(ISBN),
+ISBN varchar(13)not null,
+foreign key (ISBN)  references 书籍(ISBN)on update cascade  on delete cascade,
+)
+
