@@ -73,7 +73,7 @@ create UNIQUE INDEX 顾客名单 ON 顾客 (姓名 ASC);
 create table 记录(
 日期 date not null,
 姓名 varchar(10) not null,
-经手人 varchar(10) not null,
+经手人 int not null identity,
 ISBN varchar(13) not null,
 金额 numeric(7,2) not null check(金额>0),
 折扣 numeric(3,2) default '1'check(折扣<=1 and 折扣>0),
@@ -81,6 +81,7 @@ ISBN varchar(13) not null,
 primary key(账号),
 foreign key (ISBN) references 书籍(ISBN) on update cascade  on delete cascade,
 foreign key (账号) references 顾客(账号) on update cascade  on delete cascade,
+foreign key (经手人) references 管理员(id) on update cascade  on delete cascade,
 )
 create UNIQUE INDEX 交易记录 ON 记录 (日期 ASC);
 
@@ -88,8 +89,8 @@ create UNIQUE INDEX 交易记录 ON 记录 (日期 ASC);
 create table 进货表(
 时间 datetime not null,
 数量 int not null default '0',
-primary key(ISBN),
 ISBN varchar(13)not null,
+primary key(ISBN),
 foreign key (ISBN)  references 书籍(ISBN)on update cascade  on delete cascade,
 )
 create UNIQUE INDEX 进货记录 ON 进货表 (时间 ASC);
