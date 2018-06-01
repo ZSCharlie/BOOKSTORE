@@ -6,9 +6,9 @@ use bookstore
 
 create table 管理员(
 id int not null  IDENTITY,
-姓名 varchar not null ,
-用户名 varchar not null unique default '管理员',
-密码 varchar not null,
+姓名 varchar(10) not null ,
+用户名 varchar(16) not null unique default '管理员',
+密码 varchar(40) not null,
 联系方式 varchar(11) not null,
 primary key (id),
 );
